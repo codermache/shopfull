@@ -13,7 +13,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.User;
 
-
 public class UserDAO extends DBContext {
 
     public Vector<User> getAll() {
@@ -33,7 +32,7 @@ public class UserDAO extends DBContext {
                 String phone = rs.getString("phone");
                 String address = rs.getString("address");
                 int role_id = rs.getInt("role_id");
-                
+
                 User u = new User(id, username, password, fullname, email, phone, address, role_id);
                 users.add(u);
             }
@@ -99,8 +98,7 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
-    
-    
+
     //get all customer (role_id = 1)
     public Vector<User> getAllCustomer() {
         PreparedStatement stm = null;
@@ -120,7 +118,7 @@ public class UserDAO extends DBContext {
                 String address = rs.getString("address");
                 int role_id = rs.getInt("role_id");
                 int banned = rs.getInt("banned");
-                
+
                 User u = new User(id, username, password, fullname, email, phone, address, role_id, banned);
                 users.add(u);
             }
@@ -142,22 +140,23 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
-     public String getUserRegister(String username, String pass, String name,String email, String phone, String address ) {
-        
+
+    public String getUserRegister(String username, String pass, String name, String email, String phone, String address) {
+
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
             //chuan bi string sql
             String sql = " INSERT INTO [dbo].[user]\n"
-                + "           ([username]\n"
-                + "           ,[password]\n"
-                + "           ,[fullname]\n"
-                + "           ,[email]\n"
-                + "           ,[phone]\n"
-                + "           ,[address]\n"
-                + "           ,[role_id])\n"
-                + "     VALUES\n"
-                + "           (?,?,?,?,?,?,1)";
+                    + "           ([username]\n"
+                    + "           ,[password]\n"
+                    + "           ,[fullname]\n"
+                    + "           ,[email]\n"
+                    + "           ,[phone]\n"
+                    + "           ,[address]\n"
+                    + "           ,[role_id])\n"
+                    + "     VALUES\n"
+                    + "           (?,?,?,?,?,?,1)";
             ps = connection.prepareStatement(sql);
             //set bien dungs voiw thuw tu bien trong string tren
             ps.setString(1, username);
@@ -166,10 +165,10 @@ public class UserDAO extends DBContext {
             ps.setString(4, email);
             ps.setString(5, phone);
             ps.setString(6, address);
-         
+
             //goi cau lenh execute
             ps.executeUpdate();
-        }  catch (SQLException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class
                     .getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -184,8 +183,7 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
-     
-     
+
     public void insert(User user) {
         PreparedStatement stm = null;
 
@@ -226,7 +224,7 @@ public class UserDAO extends DBContext {
             }
         }
     }
-    
+
     public User getUserById(int userId) {
         PreparedStatement stm = null;
         ResultSet rs = null;
@@ -250,7 +248,7 @@ public class UserDAO extends DBContext {
                 System.out.println(u);
                 return u;
             }
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class
                     .getName()).log(Level.SEVERE, null, ex);
@@ -267,7 +265,7 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
-    
+
     public Vector<User> getCustomerByName(String name) {
         PreparedStatement stm = null;
         ResultSet rs = null;
@@ -278,7 +276,7 @@ public class UserDAO extends DBContext {
             stm = connection.prepareStatement(sql);
             stm.setString(1, "%" + name + "%");
             rs = stm.executeQuery();
-            
+
             while (rs.next()) {
                 User u = new User();
                 u.setId(rs.getInt("id"));
@@ -311,7 +309,6 @@ public class UserDAO extends DBContext {
         return null;
     }
 
-    
     public void banAnUser(int userId) {
         PreparedStatement stm = null;
 
@@ -337,7 +334,8 @@ public class UserDAO extends DBContext {
             }
         }
     }
-     public void unbanAnUser(int userId) {
+
+    public void unbanAnUser(int userId) {
         PreparedStatement stm = null;
 
         String sql = "UPDATE [dbo].[user] SET [banned] = 0 WHERE id = ?";
@@ -361,5 +359,59 @@ public class UserDAO extends DBContext {
                         .getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+
+    public User updateProfileUser(String username, String password, String fullname, String address, String email, String phone) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        User updatedUser = null;
+        try {
+            String sql = "UPDATE [dbo].[user]\n"
+                    + "   SET \n"
+                    + "      [password] = ?,\n"
+                    + "      [fullname] = ?,\n"
+                    + "      [email] = ?,\n"
+                    + "      [phone] = ?,\n"
+                    + "      [address] = ?,\n"
+                    + "	  [username] = ?,\n"
+                    + "update_at = CURRENT_TIMESTAMP where [username] = ?";
+
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, password);
+            ps.setString(2, fullname);
+            ps.setString(3, address);
+            ps.setString(4, email);
+            ps.setString(5, phone);
+            ps.setString(6, username);
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                // If the update was successful, retrieve the updated user information
+                String selectSql = "select * from [dbo].[user] where username = ?";
+                ps = connection.prepareStatement(selectSql);
+                ps.setString(1, username);
+                rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    // Create a User object with the updated information
+                    updatedUser = new User();
+                    updatedUser.setPassword(rs.getString("password"));
+                    updatedUser.setFullname(rs.getString("fullname"));
+                    updatedUser.setAddress(rs.getString("address"));
+                    updatedUser.setEmail(rs.getString("email"));
+                    updatedUser.setPhone(rs.getString("phone"));
+                    updatedUser.setUsername(rs.getString("username"));
+
+                }
+
+                rs.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Close resources (Connection, PreparedStatement, etc.)
+        }
+
+        return updatedUser;
     }
 }
