@@ -72,9 +72,9 @@
                 <div class="col-lg-6 d-none d-lg-block">
                     <div class="d-inline-flex align-items-center">
                         <span class="text-muted px-2">|</span>
-                        <a class="text-dark" href="#">B20DCAT187</a>
+                        <a class="text-dark" href="#">Wellcome</a>
                         <span class="text-muted px-2">|</span>
-                        <a class="text-dark" href="#">Pham Cong Thuoc</a>
+                        <a class="text-dark" href="#">Shopp</a>
                         <span class="text-muted px-2">|</span>
                     </div>
                 </div>
