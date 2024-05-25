@@ -96,37 +96,61 @@
         <script>
             // JavaScript code để kiểm tra session timeout và hiển thị cảnh báo
             $(document).ready(function () {
-                // Kiểm tra nếu session timeout
+            // Kiểm tra nếu session timeout
             <% if (request.getAttribute("sessionTimeout") != null) { %>
-                alert("Session đã hết hạn, vui lòng đăng nhập lại.");
-                // Chuyển hướng về trang login
-                window.location.replace("${pageContext.request.contextPath}/login");
+            alert("Session đã hết hạn, vui lòng đăng nhập lại.");
+            // Chuyển hướng về trang login
+            window.location.replace("${pageContext.request.contextPath}/login");
             <% } %>
 
-                // JavaScript để chuyển đổi giữa chế độ xem và chỉnh sửa
-                $('#editButton').click(function () {
-                    $('#fullnameInput, #emailInput, #phoneInput, #addressInput').prop('readonly', false);
-                    $('#editButton').hide();
-                    $('#saveButton, #cancelButton').show();
-                });
-
-                $('#cancelButton').click(function () {
-                    $('#fullnameInput, #emailInput, #phoneInput, #addressInput').val(function () {
-                        return originalValues[this.id];
-                    }).prop('readonly', true);
-                    $('#editButton').show();
-                    $('#saveButton, #cancelButton').hide();
-                });
-
+            // JavaScript để chuyển đổi giữa chế độ xem và chỉnh sửa
+            $('#editButton').click(function () {
+            $('#fullnameInput, #emailInput, #phoneInput, #addressInput').prop('readonly', false);
+            $('#editButton').hide();
+            $('#saveButton, #cancelButton').show();
+            });
+            $('#cancelButton').click(function () {
+            $('#fullnameInput, #emailInput, #phoneInput, #addressInput').val(function () {
+            return originalValues[this.id];
+            }).prop('readonly', true);
+            $('#editButton').show();
+            $('#saveButton, #cancelButton').hide();
+            });
             });
         </script>
+
+        <script>
+            $('#saveButton').click(function () {
+            // Lấy dữ liệu mới từ các input
+            var newData = {
+            fullname: $('#fullnameInput').val(),
+                    email: $('#emailInput').val(),
+                    phone: $('#phoneInput').val(),
+                    address: $('#addressInput').val()
+            };
+            // Gửi AJAX request
+            $.ajax({
+            type: 'POST',
+                    url: '${pageContext.request.contextPath}/viewUserProfile', // Địa chỉ của servlet xử lý
+                    data: newData,
+                    success: function (response) {
+                    alert('Profile updated successfully!');
+                    // Cập nhật giao diện người dùng nếu cần
+                    },
+                    error: function () {
+                    alert('An error occurred. Please try again later.');
+                    }
+            });
+            });
+        </script>
+
         <script>
             var originalValues = {
-                username: "${sessionScope.user.username}",
-                fullname: "${sessionScope.user.fullname}",
-                email: "${sessionScope.user.email}",
-                phone: "${sessionScope.user.phone}",
-                address: "${sessionScope.user.address}"
+            username: "${sessionScope.user.username}",
+                    fullname: "${sessionScope.user.fullname}",
+                    email: "${sessionScope.user.email}",
+                    phone: "${sessionScope.user.phone}",
+                    address: "${sessionScope.user.address}"
             };
         </script>
         <script src="${pageContext.request.contextPath}/js/profileEdit.js"></script>

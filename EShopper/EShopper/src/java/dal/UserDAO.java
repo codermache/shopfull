@@ -361,7 +361,7 @@ public class UserDAO extends DBContext {
         }
     }
 
-    public void update(User user) {
+    public boolean update(User user) {
         PreparedStatement stm = null;
 
         String sql = "UPDATE [dbo].[user]\n"
@@ -378,9 +378,8 @@ public class UserDAO extends DBContext {
             stm.setString(3, user.getPhone());
             stm.setString(4, user.getAddress());
             stm.setString(5, user.getUsername());
-            stm.executeUpdate();
-
-            System.out.println("Update OK");
+            int rowsUpdated = stm.executeUpdate();
+            return rowsUpdated > 0;
 
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -396,6 +395,7 @@ public class UserDAO extends DBContext {
                 Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        return false;
     }
 
 }

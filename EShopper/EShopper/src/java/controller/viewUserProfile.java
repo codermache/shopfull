@@ -2,6 +2,7 @@
 package controller;
 
 
+import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -34,20 +35,20 @@ public class viewUserProfile extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
          HttpSession session = request.getSession(false); // Lấy session hiện tại (nếu tồn tại)
-         System.out.println("thinhh1");
+       
          System.out.println(session);
         if (session != null) {
-            System.out.println("thinhh2");
+          
             User user = (User) session.getAttribute("user");
             if (user != null) {
-                System.out.println("thinhhok");
+               
                 request.getRequestDispatcher("ViewUserProfile.jsp").forward(request, response);
             } else {
-                System.out.println("thinhh3");
+               
                 response.sendRedirect(request.getContextPath() + "/login");
             }
         } else {
-          System.out.println("thinhh4");
+        
            request.setAttribute("sessionTimeout", true);
             request.getRequestDispatcher("ViewUserProfile.jsp").forward(request, response);
         }
@@ -57,8 +58,33 @@ public class viewUserProfile extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+       // Lấy dữ liệu mới từ request
+        String fullname = request.getParameter("fullname");
+        String email = request.getParameter("email");
+        String phone = request.getParameter("phone");
+        String address = request.getParameter("address");
+        
+        // Lấy thông tin người dùng từ session hoặc cookie
+        // Phần này cần phải thay đổi tùy thuộc vào cách bạn xử lý đăng nhập và quản lý phiên.
+        User user = (User) request.getSession().getAttribute("user");
+
+        // Cập nhật thông tin người dùng
+        user.setFullname(fullname);
+        user.setEmail(email);
+        user.setPhone(phone);
+        user.setAddress(address);
+
+        // Lưu thông tin người dùng vào cơ sở dữ liệu
+        UserDAO userDAO = new UserDAO();
+        if (userDAO.update(user)) {
+            // Trả về phản hồi thành công
+            response.getWriter().write("success");
+        } else {
+            // Trả về phản hồi thất bại
+            response.getWriter().write("failure");
+        }
     }
+    
 
     
     @Override
