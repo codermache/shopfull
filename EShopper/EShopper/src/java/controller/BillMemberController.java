@@ -36,6 +36,27 @@ public class BillMemberController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+        
+         // Lấy dữ liệu từ form tìm kiếm
+    String searchDate = request.getParameter("searchDate");
+    
+    // Kiểm tra nếu ngày tìm kiếm không rỗng
+    if (searchDate != null && !searchDate.isEmpty()) {
+        // Xử lý tìm kiếm các hóa đơn cho ngày đã chọn
+        Vector<BillDetail> billDetails = (new BillDAO()).getOrderHistoryByDate(searchDate);
+        
+        // Đặt danh sách hóa đơn vào thuộc tính của request
+        request.setAttribute("billDetails", billDetails);
+    } else {
+        // Nếu không có ngày tìm kiếm, hiển thị tất cả hóa đơn
+        int userId = Integer.parseInt(request.getParameter("userId"));
+        Vector<BillDetail> billDetails = (new BillDAO()).getOrderHistoryByUserId(userId);
+        request.setAttribute("billDetails", billDetails);
+    }
+    // Chuyển hướng đến trang JSP
+    request.getRequestDispatcher("viewAllBills.jsp").forward(request, response);
+        
+        
          int userId = Integer.parseInt(request.getParameter("userId"));
         BillDAO billDAO = new BillDAO();
         Vector<BillDetail> billDetails = billDAO.getOrderHistoryByUserId(userId);

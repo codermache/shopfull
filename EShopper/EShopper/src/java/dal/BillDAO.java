@@ -109,7 +109,57 @@ public class BillDAO extends DBContext {
         try {
             stm = connection.prepareStatement(sql);
             stm.setInt(1, billId);
+            rs = stm.executeQuery();
 
+            while (rs.next()) {
+                BillDetail billDetail = new BillDetail();
+                billDetail.setId(rs.getInt("id"));
+                billDetail.setCustomerName(rs.getString("CustomerName"));
+                billDetail.setCreated_date(rs.getDate("CreatedDate"));
+                billDetail.setProductName(rs.getString("ProductName"));
+                billDetail.setImage_url(rs.getString("image_url"));
+                billDetail.setProductQuantity(rs.getInt("Quantity"));
+                billDetail.setPrice(rs.getDouble("price"));
+                billDetail.setSubTotal(rs.getDouble("SubTotal"));
+
+                billDetails.add(billDetail);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(BillDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stm != null) {
+                    stm.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(BillDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return billDetails;
+    }
+
+    public Vector<BillDetail> getOrderHistoryByDate(String date) {
+
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        Vector<BillDetail> billDetails = new Vector<>();
+        String sql = "SELECT b.id, u.fullname AS CustomerName, b.created_date AS CreatedDate, \n"
+                + "p.name AS ProductName, p.image_url, od.product_quantity AS Quantity, \n"
+                + "p.price, (p.price * od.product_quantity) AS SubTotal \n"
+                + "FROM bill b \n"
+                + "JOIN [user] u ON u.id = b.user_id \n"
+                + "JOIN order_detail od ON od.order_id = b.order_id \n"
+                + "JOIN product p ON p.id = od.product_id \n"
+                + "WHERE CAST(b.created_date AS DATE) = ?";
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, date);
             rs = stm.executeQuery();
 
             while (rs.next()) {
@@ -146,7 +196,7 @@ public class BillDAO extends DBContext {
     }
 
     public Vector<BillDetail> getOrderHistoryByUserId(int billId) {
-       PreparedStatement stm = null;
+        PreparedStatement stm = null;
         ResultSet rs = null;
         Vector<BillDetail> billDetails = new Vector<>();
         String sql = "select b.id, u.fullname as [CustomerName], b.created_date as [CreatedDate], p.[name] as [ProductName],\n"
@@ -155,7 +205,7 @@ public class BillDAO extends DBContext {
                 + "join [order_detail] od on od.order_id = b.order_id\n"
                 + "join [product] p on p.id = od.product_id\n"
                 + "where b.user_id = ?";
-         try {
+        try {
             stm = connection.prepareStatement(sql);
             stm.setInt(1, billId);
 
