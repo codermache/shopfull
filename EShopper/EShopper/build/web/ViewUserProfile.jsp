@@ -1,191 +1,148 @@
-<%-- 
-    Document   : ViewUserProfile
-    Created on : May 18, 2024, 1:22:49 AM
-    Author     : Thinkpad
---%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-     <head>
+    <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-        <!-- set the encoding of your site -->
-        <meta charset="utf-8">
-        <!-- set the viewport width and initial-scale on mobile devices -->
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- include the site stylesheet -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/profileSetting.css">
         <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,200italic,300,300italic,400italic,600,600italic,700,700italic,900,900italic%7cMontserrat:400,700%7cOxygen:400,300,700' rel='stylesheet' type='text/css'>
-        <!-- include the site stylesheet -->
-        <link rel="stylesheet" href="css/bootstrap.css">
-        <!-- include the site stylesheet -->
-        <link rel="stylesheet" href="css/animate.css">
-        <!-- include the site stylesheet -->
-        <link rel="stylesheet" href="css/icon-fonts.css">
-        <!-- include the site stylesheet -->
-        <link rel="stylesheet" href="css/main.css">
-        <!-- include the site stylesheet -->
-        <link rel="stylesheet" href="css/responsive.css">
-        <style>
-            body {
-                background: #F6F6F6;
-            }
 
-            .form-control:focus {
-                box-shadow: none;
-                border-color: #F6F6F6;
-            }
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.css">
 
-            .profile-button {
-                background: #3A3B3C;
-                box-shadow: none;
-                border: none;
-            }
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/animate.css">
 
-            .profile-button:hover {
-                background: #682773;
-            }
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/icon-fonts.css">
 
-            .profile-button:focus {
-                background: #682773;
-                box-shadow: none;
-            }
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css">
 
-            .profile-button:active {
-                background: #682773;
-                box-shadow: none;
-            }
-
-            .back:hover {
-                color: #682773;
-                cursor: pointer;
-            }
-        </style>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/responsive.css">
     </head>
     <body>
         <!-- Header -->
         <%@include file="Panner.jsp" %>
-        <div class="container rounded bg-white mt-5">
-                    <div class="row">
-                        <div class="col-md-4 border-right">
-                            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                                
-                                <img class="rounded-circle mt-5" src="img/default-avatar.jpg" width="90">
-                                
-                                <span class="font-weight-bold">${profile.username}</span>
-                                <span class="text-black-50">${profile.email}</span>
-                                <span>${profile.address}</span></div>
-                            <div class="row mt-2">
-                                <div class="col-md-6">
-                                    <label for="username">Username</label>
-                                    <input name="username" type="text" class="form-control"  placeholder="Username" value="${profile.username}" readonly>
-                                </div>
+        <div class="container light-style flex-grow-1 container-p-y">
 
-                                <div class="d-flex justify-content-between align-items-center mb-3 p-1 py-5">
-                                    <a href="changepassword" class="d-flex flex-row align-items-center back ">
-                                        <h6>Change Password</h6>    
-                                        <i class="fa fa-long-arrow-right mr-1 mb-1"></i>
-
-                                    </a>
-
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="col-md-8">
-                            <div class="p-3 py-5">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <a href="../Project_BookStore/Home" class="d-flex flex-row align-items-center back">
-                                        <i class="fa fa-long-arrow-left mr-1 mb-1"></i>
-                                        <h6>Back to home</h6>
-                                    </a>
-                                    <h6 class="text-right">Edit Profile</h6>
-                                </div>
-                                <form method="post" action="profile" onsubmit="showSuccessMessage();">
-                                    <div class="row mt-2">
-                                        <div class="col-md-6">
-                                            <label for="name">Name</label>
-                                            <input name="name" type="text" class="form-control" id="name" placeholder="Name" value="${sessionScope.user.name}">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="dob">Date of Birth</label>
-                                            <input name="dob" type="date" class="form-control" id="date" value="${sessionScope.user.dob}" placeholder="Date of birth">
-                                        </div>
-                                    </div>
-                                    <div class="row mt-3">
-                                        <div class="col-md-6">
-                                            <label for="email">Email</label>
-                                            <input name="email" type="email" class="form-control" id="email" placeholder="Email" value="${sessionScope.user.mail}">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="phone">Phone Number</label>
-                                            <input name="phone" type="tel" class="form-control" id="phone" value="${sessionScope.user.phone}" placeholder="Phone number">
-                                        </div>
-                                    </div>
-                                    <div class="row mt-3">
-                                        <div class="col-md-6">
-                                            <label for="address">Address</label>
-                                            <input name="address" type="text" class="form-control" id="address" placeholder="Address" value="${sessionScope.user.address}">
-                                        </div>
-                                        <div class="col-md-6">
-
-                                            <input name="username" type="text" class="form-control" id="username" placeholder="Username" value="${sessionScope.user.username}" hidden>
-                                        </div>
-                                    </div>
-                                    <div class="row mt-3">
-                                        <div class="form-group col-md-6">
-                                            <label for="question">Security Question</label>
-                                            <select name="question" class="form-control" required>
-                                                <option value="" disabled>Select Security Question</option>
-                                                <option value="What is your favorite color?" ${profile.question == 'What is your favorite color?' ? 'selected' : ''}>What is your favorite color?</option>
-                                                <option value="What is your mother's maiden name?" ${profile.question == 'What is your mother\'s maiden name?' ? 'selected' : ''}>What is your mother's maiden name?</option>
-                                                <option value="What is the name of your first pet?" ${profile.question == 'What is the name of your first pet?' ? 'selected' : ''}>What is the name of your first pet?</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="answer">Answer</label>
-                                            <input name="answer" type="text" class="form-control" id="answer" value="${profile.answer}" placeholder="Answer">
-                                        </div>
-                                    </div>
-                                    <div class="mt-5 text-right">
-                                        <button class="btn btn-primary profile-button" type="Submit">Save Profile</button>
-                                    </div>
-                                    <a href="home.jsp">Back to HomePage</a>
-                                </form>
-                                ${mess}
-                            </div>
+            <h4 class="font-weight-bold py-3 mb-4">
+                Account settings
+            </h4>
+            <div class="card overflow-hidden">
+                <div class="row no-gutters row-bordered row-border-light">
+                    <div class="col-md-3 pt-0">
+                        <div class="list-group list-group-flush account-settings-links">
+                            <a class="list-group-item list-group-item-action active" data-toggle="list"
+                               href="#account-general">General</a>
                         </div>
                     </div>
-                </div>
-         <!-- Footer -->
-        <%@include file="Footer.jsp" %>
-        
-         <script>
-            function showSuccessMessage() {
-                const successMessage = document.getElementById('successMessage');
-                successMessage.style.display = 'block';
-            }
-            $(document).ready(function () {
-                $('#showPassword').click(function () {
-                    const passwordInput = $('#password');
-                    const passwordToggle = $('#passwordToggle');
+                    <div class="col-md-9">
+                        <c:if test="${sessionScope.user != null}">
+                            <form id="userForm" method="post" action="updateUserProfile">
+                                <div class="tab-content">
+                                    <div class="tab-pane fade active show" id="account-general">
+                                        <div class="card-body media align-items-center">
+                                            <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt
+                                                 class="d-block ui-w-80">
+                                        </div>
+                                        <hr class="border-light m-0">
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <label class="form-label">Username</label>                     
+                                                <input id="usernameInput" type="text" class="form-control mb-1" value="${sessionScope.user.username}" readonly>
+                                                <p id="username-alert" class="text-danger"></p>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="form-label">fullname</label>
+                                                <input id="fullnameInput" type="text" class="form-control" value="${sessionScope.user.fullname}" readonly>
+                                                <p id="fullname-alert" class="text-danger"></p>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="form-label">E-mail</label>
+                                                <input id="emailInput" type="text" class="form-control mb-1" value="${sessionScope.user.email}" readonly>
+                                                <p id="email-alert" class="text-danger"></p>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="form-label">phone</label>
+                                                <input id="phoneInput" type="text" class="form-control" value="${sessionScope.user.phone}" readonly>
+                                                <p id="phone-alert" class="text-danger"></p>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="form-label">Address</label>
+                                                <input id="addressInput" type="text" class="form-control" value="${sessionScope.user.address}" readonly>
+                                                <p id="adress-alert" class="text-danger"></p>
+                                            </div>
+                                            <div class="text-right mt-3" style="padding-right: 20px;">
+                                                <button id="editButton" type="button" class="btn btn-primary">Edit</button>&nbsp;
+                                                <button id="saveButton" type="button" class="btn btn-success" style="display:none;">Save Change</button>
+                                                <button id="cancelButton" type="button" class="btn btn-default" style="display:none;">Cancel</button>
+                                            </div>
+                                        </div>
 
-                    if (passwordInput.attr('type') === 'password') {
-                        passwordInput.attr('type', 'text');
-                        passwordToggle.removeClass('fa-eye');
-                        passwordToggle.addClass('fa-eye-slash');
-                    } else {
-                        passwordInput.attr('type', 'password');
-                        passwordToggle.removeClass('fa-eye-slash');
-                        passwordToggle.addClass('fa-eye');
-                    }
+                                    </div>
+                                </div>
+                            </form>
+                        </c:if>                
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- Footer -->
+        <%@include file="Footer.jsp" %>
+
+
+
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script>
+            // JavaScript code để kiểm tra session timeout và hiển thị cảnh báo
+            $(document).ready(function () {
+                // Kiểm tra nếu session timeout
+            <% if (request.getAttribute("sessionTimeout") != null) { %>
+                alert("Session đã hết hạn, vui lòng đăng nhập lại.");
+                // Chuyển hướng về trang login
+                window.location.replace("${pageContext.request.contextPath}/login");
+            <% } %>
+
+                // JavaScript để chuyển đổi giữa chế độ xem và chỉnh sửa
+                $('#editButton').click(function () {
+                    $('#fullnameInput, #emailInput, #phoneInput, #addressInput').prop('readonly', false);
+                    $('#editButton').hide();
+                    $('#saveButton, #cancelButton').show();
                 });
+
+                $('#cancelButton').click(function () {
+                    $('#fullnameInput, #emailInput, #phoneInput, #addressInput').val(function () {
+                        return originalValues[this.id];
+                    }).prop('readonly', true);
+                    $('#editButton').show();
+                    $('#saveButton, #cancelButton').hide();
+                });
+
             });
         </script>
-        
+        <script>
+            var originalValues = {
+                username: "${sessionScope.user.username}",
+                fullname: "${sessionScope.user.fullname}",
+                email: "${sessionScope.user.email}",
+                phone: "${sessionScope.user.phone}",
+                address: "${sessionScope.user.address}"
+            };
+        </script>
+        <script src="${pageContext.request.contextPath}/js/profileEdit.js"></script>
+        <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script type="text/javascript">
+
+
+<!-- include jQuery -->
+        <script src="${pageContext.request.contextPath}/js/jquery.js"></script>
+        <!-- include jQuery -->
+        <script src="${pageContext.request.contextPath}/js/plugins.js"></script>
+        <!-- include jQuery -->
+        <script src="${pageContext.request.contextPath}/js/jquery.main.js"></script>
+
+
     </body>
 </html>

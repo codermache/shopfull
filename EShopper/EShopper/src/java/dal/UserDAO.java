@@ -361,57 +361,41 @@ public class UserDAO extends DBContext {
         }
     }
 
-    public User updateProfileUser(String username, String password, String fullname, String address, String email, String phone) {
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        User updatedUser = null;
+    public void update(User user) {
+        PreparedStatement stm = null;
+
+        String sql = "UPDATE [dbo].[user]\n"
+                + "SET fullname = ?,\n"
+                + "    email = ?,\n"
+                + "    phone = ?,\n"
+                + "    address = ?\n"
+                + "WHERE username = ?";
+
         try {
-            String sql = "UPDATE [dbo].[user]\n"
-                    + "   SET \n"
-                    + "      [password] = ?,\n"
-                    + "      [fullname] = ?,\n"
-                    + "      [email] = ?,\n"
-                    + "      [phone] = ?,\n"
-                    + "      [address] = ?,\n"
-                    + "	  [username] = ?,\n"
-                    + "update_at = CURRENT_TIMESTAMP where [username] = ?";
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, user.getFullname());
+            stm.setString(2, user.getEmail());
+            stm.setString(3, user.getPhone());
+            stm.setString(4, user.getAddress());
+            stm.setString(5, user.getUsername());
+            stm.executeUpdate();
 
-            ps = connection.prepareStatement(sql);
-            ps.setString(1, password);
-            ps.setString(2, fullname);
-            ps.setString(3, address);
-            ps.setString(4, email);
-            ps.setString(5, phone);
-            ps.setString(6, username);
-            int rowsAffected = ps.executeUpdate();
+            System.out.println("Update OK");
 
-            if (rowsAffected > 0) {
-                // If the update was successful, retrieve the updated user information
-                String selectSql = "select * from [dbo].[user] where username = ?";
-                ps = connection.prepareStatement(selectSql);
-                ps.setString(1, username);
-                rs = ps.executeQuery();
-
-                if (rs.next()) {
-                    // Create a User object with the updated information
-                    updatedUser = new User();
-                    updatedUser.setPassword(rs.getString("password"));
-                    updatedUser.setFullname(rs.getString("fullname"));
-                    updatedUser.setAddress(rs.getString("address"));
-                    updatedUser.setEmail(rs.getString("email"));
-                    updatedUser.setPhone(rs.getString("phone"));
-                    updatedUser.setUsername(rs.getString("username"));
-
-                }
-
-                rs.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            // Close resources (Connection, PreparedStatement, etc.)
+            try {
+                if (stm != null) {
+                    stm.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-
-        return updatedUser;
     }
+
 }

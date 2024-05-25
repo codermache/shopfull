@@ -54,6 +54,14 @@
                 vertical-align: top;
                 margin-left: -10px;
             }
+            .profile-link {
+                color: inherit; /* This will inherit the text color of the parent span */
+                text-decoration: none; /* Removes the underline from the link */
+            }
+
+            .profile-link:hover {
+                text-decoration: underline; /* Underline on hover for better UX */
+            }
         </style>
     </head>
 
@@ -74,7 +82,10 @@
 
                     <c:if test="${sessionScope.fullname != null}">
                         <span class="text-muted px-2">|</span>
-                        <span class="text-dark">Welcome: ${sessionScope.fullname}</span>
+                        <span class="text-dark">
+                            Welcome: <a href="viewUserProfile" class="profile-link">${sessionScope.fullname}</a>
+                        </span>
+
                         <span class="text-muted px-2">|</span>
 
                         <span class="text-muted px-2">|</span>

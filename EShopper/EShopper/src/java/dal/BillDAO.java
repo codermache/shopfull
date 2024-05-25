@@ -16,7 +16,6 @@ import model.BillDetailForAdmin;
 import model.Order;
 import model.User;
 
-
 public class BillDAO extends DBContext {
 
     public int insert(Order order, User user, String status) {
@@ -108,6 +107,55 @@ public class BillDAO extends DBContext {
                 + "join [product] p on p.id = od.product_id\n"
                 + "where b.id = ?";
         try {
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, billId);
+
+            rs = stm.executeQuery();
+
+            while (rs.next()) {
+                BillDetail billDetail = new BillDetail();
+                billDetail.setId(rs.getInt("id"));
+                billDetail.setCustomerName(rs.getString("CustomerName"));
+                billDetail.setCreated_date(rs.getDate("CreatedDate"));
+                billDetail.setProductName(rs.getString("ProductName"));
+                billDetail.setImage_url(rs.getString("image_url"));
+                billDetail.setProductQuantity(rs.getInt("Quantity"));
+                billDetail.setPrice(rs.getDouble("price"));
+                billDetail.setSubTotal(rs.getDouble("SubTotal"));
+
+                billDetails.add(billDetail);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(BillDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stm != null) {
+                    stm.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(BillDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return billDetails;
+    }
+
+    public Vector<BillDetail> getOrderHistoryByUserId(int billId) {
+       PreparedStatement stm = null;
+        ResultSet rs = null;
+        Vector<BillDetail> billDetails = new Vector<>();
+        String sql = "select b.id, u.fullname as [CustomerName], b.created_date as [CreatedDate], p.[name] as [ProductName],\n"
+                + "image_url, product_quantity as [Quantity], p.price, (p.price * product_quantity) as SubTotal from [bill] b\n"
+                + "join [user] u on u.id = b.[user_id]\n"
+                + "join [order_detail] od on od.order_id = b.order_id\n"
+                + "join [product] p on p.id = od.product_id\n"
+                + "where b.user_id = ?";
+         try {
             stm = connection.prepareStatement(sql);
             stm.setInt(1, billId);
 
@@ -243,7 +291,8 @@ public class BillDAO extends DBContext {
         }
         return billDetailForAdmins;
     }
-      public Vector<BillDetailForAdmin> showBillDetailForAdminByCustomerName(String name) {
+
+    public Vector<BillDetailForAdmin> showBillDetailForAdminByCustomerName(String name) {
         PreparedStatement stm = null;
         ResultSet rs = null;
         Vector<BillDetailForAdmin> billDetailForAdmins = new Vector<>();
@@ -257,7 +306,7 @@ public class BillDAO extends DBContext {
                 + "group by b.id, u.fullname , b.created_date, b.[status], u.address, u.email, u.phone";
         try {
             stm = connection.prepareStatement(sql);
-             stm.setString(1, "%" + name + "%");
+            stm.setString(1, "%" + name + "%");
             rs = stm.executeQuery();
 
             while (rs.next()) {
@@ -275,7 +324,7 @@ public class BillDAO extends DBContext {
             }
         } catch (SQLException ex) {
             Logger.getLogger(BillDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        }
         return billDetailForAdmins;
     }
 

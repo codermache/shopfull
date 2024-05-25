@@ -9,7 +9,12 @@
             <file>file:/D:/Semester_4/EShopper/EShopper/web/admin.index.jsp</file>
         </group>
         <group>
-            <file>file:/E:/C%23%20.net/prj/EShopper/EShopper/web/admin.index.jsp</file>
+            <file>file:/E:/C%23%20.net/prj/shopfull/EShopper/EShopper/web/ViewUserProfile.jsp</file>
+            <file>file:/E:/C%23%20.net/prj/shopfull/EShopper/EShopper/web/Panner.jsp</file>
+            <file>file:/E:/C%23%20.net/prj/shopfull/EShopper/EShopper/web/js/profileEdit.js</file>
+            <file>file:/E:/C%23%20.net/prj/shopfull/EShopper/EShopper/src/java/model/User.java</file>
+            <file>file:/E:/C%23%20.net/prj/shopfull/EShopper/EShopper/src/java/controller/viewUserProfile.java</file>
+            <file>file:/E:/C%23%20.net/prj/shopfull/EShopper/EShopper/src/java/dal/UserDAO.java</file>
         </group>
     </open-files>
 </project-private>

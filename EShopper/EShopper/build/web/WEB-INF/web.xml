@@ -40,6 +40,14 @@
         <servlet-name>viewUserProfile</servlet-name>
         <servlet-class>controller.viewUserProfile</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>BillMemberController</servlet-name>
+        <servlet-class>controller.BillMemberController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateUserProfile</servlet-name>
+        <servlet-class>controller.UpdateUserProfile</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -79,6 +87,14 @@
     <servlet-mapping>
         <servlet-name>viewUserProfile</servlet-name>
         <url-pattern>/viewUserProfile</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BillMemberController</servlet-name>
+        <url-pattern>/BillMember</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateUserProfile</servlet-name>
+        <url-pattern>/updateUserProfile</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

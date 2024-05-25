@@ -202,6 +202,14 @@
                                         </c:forEach>
                                     </tbody>
                                 </table>
+                                        
+                                        <%--phan thong ke bill oder --%>
+                                <a href="BillMember?userId=${user.id}">
+                                    <button class="btn btn-block btn-primary my-3 py-3"
+                                            style="float: right; width: 15%;" >
+                                        view all bill order
+                                    </button>
+                                </a>
                             </div>
 
                             <div class="col-lg-4" style="transform: translateY(65px)">
